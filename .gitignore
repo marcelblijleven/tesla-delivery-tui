@@ -1,0 +1,16 @@
+# Binaries
+tesla-delivery-tui
+main
+*.exe
+
+# macOS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Build
+dist/

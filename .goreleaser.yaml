@@ -1,0 +1,177 @@
+# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
+version: 2
+
+project_name: tesla-delivery-tui
+
+before:
+  hooks:
+    - go mod tidy
+    - go generate ./...
+
+builds:
+  - id: tesla-delivery-tui
+    main: .
+    binary: tesla-delivery-tui
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w
+      - -X main.version={{.Version}}
+      - -X main.commit={{.Commit}}
+      - -X main.date={{.Date}}
+
+archives:
+  - id: default
+    format: tar.gz
+    format_overrides:
+      - goos: windows
+        format: zip
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- .Version }}_
+      {{- .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+    files:
+      - LICENSE*
+      - README*
+
+checksum:
+  name_template: 'checksums.txt'
+
+snapshot:
+  version_template: "{{ incpatch .Version }}-next"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - '^ci:'
+      - '^chore:'
+      - Merge pull request
+      - Merge branch
+
+# GitHub Release
+release:
+  github:
+    owner: marcelblijleven
+    name: tesla-delivery-tui
+  draft: false
+  prerelease: auto
+  mode: replace
+  header: |
+    ## Tesla TUI {{ .Tag }}
+
+    Tesla order/delivery status tracker for your terminal.
+  footer: |
+    **Full Changelog**: https://github.com/marcelblijleven/tesla-delivery-tui/compare/{{ .PreviousTag }}...{{ .Tag }}
+
+# Homebrew Tap
+brews:
+  - name: tesla-delivery-tui
+    repository:
+      owner: marcelblijleven
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
+    directory: Formula
+    homepage: "https://github.com/marcelblijleven/tesla-delivery-tui"
+    description: "Tesla order/delivery status tracker TUI"
+    license: "MIT"
+    commit_author:
+      name: goreleaserbot
+      email: bot@goreleaser.com
+    commit_msg_template: "Brew formula update for {{ .ProjectName }} version {{ .Tag }}"
+    install: |
+      bin.install "tesla-delivery-tui"
+    test: |
+      system "#{bin}/tesla-delivery-tui", "--version"
+
+# Scoop Bucket (Windows)
+scoops:
+  - name: tesla-delivery-tui
+    repository:
+      owner: marcelblijleven
+      name: scoop-bucket
+      token: "{{ .Env.SCOOP_BUCKET_TOKEN }}"
+    homepage: "https://github.com/marcelblijleven/tesla-delivery-tui"
+    description: "Tesla order/delivery status tracker TUI"
+    license: MIT
+    commit_author:
+      name: goreleaserbot
+      email: bot@goreleaser.com
+    commit_msg_template: "Scoop update for {{ .ProjectName }} version {{ .Tag }}"
+
+# DEB packages (Debian/Ubuntu)
+nfpms:
+  - id: deb
+    package_name: tesla-delivery-tui
+    vendor: Marcel Blijleven
+    homepage: "https://github.com/marcelblijleven/tesla-delivery-tui"
+    maintainer: "Marcel Blijleven <marcelblijleven@users.noreply.github.com>"
+    description: "Tesla order/delivery status tracker TUI"
+    license: MIT
+    formats:
+      - deb
+      - rpm
+    bindir: /usr/bin
+    section: utils
+    priority: optional
+    contents:
+      - src: ./LICENSE
+        dst: /usr/share/doc/tesla-delivery-tui/LICENSE
+        file_info:
+          mode: 0644
+    deb:
+      lintian_overrides:
+        - statically-linked-binary
+        - changelog-file-missing-in-native-package
+
+# AUR (Arch Linux) - generates PKGBUILD
+aurs:
+  - name: tesla-delivery-tui-bin
+    homepage: "https://github.com/marcelblijleven/tesla-delivery-tui"
+    description: "Tesla order/delivery status tracker TUI"
+    maintainers:
+      - "Marcel Blijleven <marcelblijleven@users.noreply.github.com>"
+    license: MIT
+    private_key: "{{ .Env.AUR_SSH_PRIVATE_KEY }}"
+    git_url: "ssh://aur@aur.archlinux.org/tesla-delivery-tui-bin.git"
+    commit_author:
+      name: goreleaserbot
+      email: bot@goreleaser.com
+    package: |-
+      install -Dm755 "./tesla-delivery-tui" "${pkgdir}/usr/bin/tesla-delivery-tui"
+      install -Dm644 "./LICENSE" "${pkgdir}/usr/share/licenses/tesla-delivery-tui/LICENSE"
+
+# Snapcraft
+snapcrafts:
+  - id: tesla-delivery-tui
+    name: tesla-delivery-tui
+    publish: true
+    summary: Tesla order/delivery status tracker TUI
+    description: |
+      A terminal user interface (TUI) application for tracking Tesla vehicle
+      orders and delivery status. Features include OAuth2 authentication with
+      Tesla's API, order list and detail views, VIN decoding, change detection,
+      and delivery timeline tracking.
+    grade: stable
+    confinement: strict
+    license: MIT
+    base: core22
+    apps:
+      tesla-delivery-tui:
+        command: tesla-delivery-tui
+        plugs:
+          - home
+          - network
+          - password-manager-service
