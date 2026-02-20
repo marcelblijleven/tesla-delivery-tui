@@ -1523,7 +1523,7 @@ func (m Model) renderDetailsTab(order model.CombinedOrder, diffs []model.OrderDi
 	detailFields = append(detailFields, renderField("ETA to Delivery Center", order.GetETAToDeliveryCenter()))
 	detailFields = append(detailFields, renderField("Vehicle Location", order.GetVehicleLocation()))
 	detailFields = append(detailFields, renderField("Delivery Method", order.GetDeliveryType()))
-	detailFields = append(detailFields, renderField("Delivery Center", data.LookupStoreName(order.GetDeliveryCenter())))
+	detailFields = append(detailFields, renderField("Delivery Center", data.GetStoreName(order.GetDeliveryCenter())))
 	detailFields = append(detailFields, renderField("Odometer", order.GetOdometer()))
 
 	// Reservation and order dates

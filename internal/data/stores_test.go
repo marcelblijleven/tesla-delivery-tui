@@ -3,7 +3,7 @@ package data
 import "testing"
 
 func TestLookupStoreName_ZeroID(t *testing.T) {
-	if got := LookupStoreName("0"); got != "N/A" {
+	if got := GetStoreName("0"); got != "N/A" {
 		t.Errorf("LookupStoreName(%q) = %q, want %q", "0", got, "N/A")
 	}
 }
@@ -22,7 +22,7 @@ func TestLookupStoreName_Passthrough(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := LookupStoreName(tt.id); got != tt.want {
+			if got := GetStoreName(tt.id); got != tt.want {
 				t.Errorf("LookupStoreName(%q) = %q, want %q", tt.id, got, tt.want)
 			}
 		})
