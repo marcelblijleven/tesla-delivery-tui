@@ -34,7 +34,7 @@ Download pre-built binaries from the [releases page](https://github.com/marcelbl
 # Run the TUI
 tesla-delivery-tui
 
-# Run in demo mode (mock data)
+# Run in demo mode (mock data, no account required)
 tesla-delivery-tui --demo
 ```
 
