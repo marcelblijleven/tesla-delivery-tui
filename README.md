@@ -2,8 +2,6 @@
 
 A terminal user interface (TUI) for tracking Tesla vehicle orders and delivery status.
 
-![Demo](demo.gif)
-
 ## Features
 
 - **OAuth2 Authentication** - Secure login with Tesla account using PKCE flow
@@ -19,47 +17,6 @@ A terminal user interface (TUI) for tracking Tesla vehicle orders and delivery s
 - **Secure Token Storage** - System keychain (macOS/Linux/Windows) with encrypted file fallback
 
 ## Installation
-
-### Homebrew (macOS/Linux)
-
-```bash
-brew install marcelblijleven/tap/tesla-delivery-tui
-```
-
-### Scoop (Windows)
-
-```bash
-scoop bucket add marcelblijleven https://github.com/marcelblijleven/scoop-bucket
-scoop install tesla-delivery-tui
-```
-
-### Arch Linux (AUR)
-
-```bash
-yay -S tesla-delivery-tui-bin
-```
-
-### Snap
-
-```bash
-snap install tesla-delivery-tui
-```
-
-### Debian/Ubuntu
-
-Download the `.deb` file from the [releases page](https://github.com/marcelblijleven/tesla-delivery-tui/releases) and install:
-
-```bash
-sudo dpkg -i tesla-delivery-tui_*.deb
-```
-
-### Fedora/RHEL
-
-Download the `.rpm` file from the [releases page](https://github.com/marcelblijleven/tesla-delivery-tui/releases) and install:
-
-```bash
-sudo rpm -i tesla-delivery-tui_*.rpm
-```
 
 ### Go Install
 
@@ -79,9 +36,6 @@ tesla-delivery-tui
 
 # Run in demo mode (mock data)
 tesla-delivery-tui --demo
-
-# Show version
-tesla-delivery-tui --version
 ```
 
 ### First Run
@@ -89,7 +43,7 @@ tesla-delivery-tui --version
 1. Launch the application
 2. Press `Enter` to start authentication
 3. Copy the URL and open it in your browser
-4. Log in with your Tesla account
+4. Log in with your Tesla account. An error will be displayed, this is expected
 5. Copy the callback URL from your browser and paste it back
 6. Your orders will be displayed
 
@@ -119,10 +73,12 @@ tesla-delivery-tui --version
 ## Configuration
 
 Configuration and tokens are stored in:
+
 - **macOS/Linux**: `~/.config/tesla-delivery-tui/`
 - **Windows**: `%APPDATA%\tesla-delivery-tui\`
 
 Tokens are stored securely using:
+
 1. System keychain (macOS Keychain, Linux Secret Service, Windows Credential Manager)
 2. Fallback: AES-256-GCM encrypted file
 
@@ -167,6 +123,7 @@ This displays a sample Model Y order with realistic data without requiring authe
 Inspired by [tesla-delivery-status-web](https://github.com/GewoonJaap/tesla-delivery-status-web) by GewoonJaap.
 
 Built with:
+
 - [Bubble Tea](https://github.com/charmbracelet/bubbletea) - TUI framework
 - [Lip Gloss](https://github.com/charmbracelet/lipgloss) - Styling
 - [Bubbles](https://github.com/charmbracelet/bubbles) - TUI components
